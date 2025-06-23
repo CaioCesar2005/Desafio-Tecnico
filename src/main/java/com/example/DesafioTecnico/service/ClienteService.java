@@ -5,6 +5,8 @@ import com.example.DesafioTecnico.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ClienteService {
 
@@ -21,5 +23,22 @@ public class ClienteService {
         }
 
         return clienteRepository.save(cliente);
+    }
+
+    @Transactional
+    public Cliente atualizarCliente(Long id, Cliente clienteAtualizado) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+
+        cliente.setNome(clienteAtualizado.getNome());
+        cliente.setTelefone(clienteAtualizado.getTelefone());
+        cliente.setEmail(clienteAtualizado.getEmail());
+
+        return clienteRepository.save(cliente);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Cliente> listarClientes() {
+        return clienteRepository.findAll();
     }
 }
