@@ -38,4 +38,17 @@ public class ContaService {
 
         return contaRepository.save(conta);
     }
+
+    @Transactional
+    public Conta CancelarContaLogicamente(Long idConta) {
+        Conta conta = contaRepository.findById(idConta)
+        .orElseThrow(() -> new IllegalArgumentException("Conta não existe no sistema")); 
+   
+        if (conta.getSituacao() == SituacaoConta.CANCELADA) {
+            throw new IllegalStateException("Conta ja esta cancelada");
+        }
+
+        conta.setSituacao(SituacaoConta.CANCELADA);
+        return contaRepository.save(conta);
+    }
 }
