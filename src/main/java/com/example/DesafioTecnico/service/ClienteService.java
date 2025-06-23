@@ -65,4 +65,12 @@ public class ClienteService {
         clienteRepository.delete(cliente);
     }
 
+    
+    @Transactional(readOnly = true)
+    public List<Conta> listarContasDoCliente(Long clienteId) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+            .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+        return contaRepository.findByCliente(cliente);
+    }
+
 }
