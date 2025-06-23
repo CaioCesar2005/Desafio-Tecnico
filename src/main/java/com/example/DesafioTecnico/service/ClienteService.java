@@ -53,7 +53,7 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
 
-        List<Conta> contas = contaRepository.findByCliente(cliente);
+        List<Conta> contas = listarContasDoCliente(id);  // reutilizando o método
 
         for (Conta conta : contas) {
             if (conta.getSituacao() != SituacaoConta.CANCELADA) {
@@ -72,5 +72,4 @@ public class ClienteService {
             .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
         return contaRepository.findByCliente(cliente);
     }
-
 }
