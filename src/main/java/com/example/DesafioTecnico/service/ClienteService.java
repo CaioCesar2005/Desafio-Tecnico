@@ -50,7 +50,7 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
 
-        contaService.cancelarContasDoCliente(cliente);
+        contaService.cancelarContasDoClienteExcluido(cliente);
         clienteRepository.delete(cliente);
     }
 }

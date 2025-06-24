@@ -54,7 +54,7 @@ public class ContaService {
     }
 
     @Transactional
-    public void cancelarContasDoCliente(Cliente cliente) {
+    public void cancelarContasDoClienteExcluido(Cliente cliente) {
         List<Conta> contas = contaRepository.findByCliente(cliente);
 
         for (Conta conta : contas) {
