@@ -1,12 +1,9 @@
 package com.example.DesafioTecnico.controller;
 
 import com.example.DesafioTecnico.model.Cliente;
-import com.example.DesafioTecnico.model.Conta;
 import com.example.DesafioTecnico.service.ClienteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
