@@ -1,11 +1,16 @@
 package com.example.DesafioTecnico.controller;
 
+import com.example.DesafioTecnico.dto.ContaRequestDTO;
+import com.example.DesafioTecnico.dto.ContaResponseDTO;
+import com.example.DesafioTecnico.mapper.ContaMapper;
 import com.example.DesafioTecnico.model.Conta;
 import com.example.DesafioTecnico.service.ContaService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ContaController {
@@ -17,16 +22,12 @@ public class ContaController {
     }
 
     @PostMapping("/clientes/{idCliente}/contas")
-    public ResponseEntity<Conta> criarConta(@PathVariable Long idCliente, @RequestBody Conta conta) {
-        Conta novaConta = contaService.cadastrarConta(idCliente, conta);
-        return ResponseEntity.ok(novaConta);
+    public ResponseEntity<ContaResponseDTO> criarConta(@PathVariable Long idCliente, @Valid @RequestBody ContaRequestDTO contaRequestDTO) {
+        Conta contaEntity = ContaMapper.toEntity(contaRequestDTO, null);
+        Conta novaConta   = contaService.cadastrarConta(idCliente, contaEntity);
+        ContaResponseDTO responseDTO = ContaMapper.toDTO(novaConta);
+        return ResponseEntity.ok(responseDTO);
     }
-
-    // @PutMapping("/contas/{id}")
-    // public ResponseEntity<Conta> atualizarConta(@PathVariable Long id, @RequestBody Conta conta) {
-    // 
-    //     return ResponseEntity.status(501).build();
-    // }
 
     @DeleteMapping("/contas/{id}")
     public ResponseEntity<Void> excluirConta(@PathVariable Long id) {
@@ -35,8 +36,11 @@ public class ContaController {
     }
 
     @GetMapping("/clientes/{idCliente}/contas")
-    public ResponseEntity<List<Conta>> listarContasPorCliente(@PathVariable Long idCliente) {
-        contaService.listarContasDoCliente(idCliente);
-        return ResponseEntity.status(501).build();
+    public ResponseEntity<List<ContaResponseDTO>> listarContasPorCliente(@PathVariable Long idCliente) {
+        List<Conta> contas = contaService.listarContasDoCliente(idCliente);
+        List<ContaResponseDTO> contasDTO = contas.stream()
+                                                 .map(ContaMapper::toDTO)
+                                                 .collect(Collectors.toList());
+        return ResponseEntity.ok(contasDTO);
     }
 }
