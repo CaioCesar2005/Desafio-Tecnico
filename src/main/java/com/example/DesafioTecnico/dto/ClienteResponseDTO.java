@@ -1,8 +1,17 @@
 package com.example.DesafioTecnico.dto;
 
-public record ClienteResponseDTO(
-    String nome,
-    String cpf,
-    String telefone,
-    String email
-) {}
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+
+public class ClienteResponseDTO {
+    private Long   id;
+    private String nome;
+    private String cpf;
+    private String telefone;
+    private String email;
+}

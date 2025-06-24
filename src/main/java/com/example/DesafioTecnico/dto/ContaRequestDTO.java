@@ -1,10 +1,18 @@
 package com.example.DesafioTecnico.dto;
 
-import java.math.BigDecimal;
 import com.example.DesafioTecnico.model.SituacaoConta;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-public record ContaRequestDTO(
-    String referencia,
-    BigDecimal valor,
-    SituacaoConta situacao
-) {}
+import java.math.BigDecimal;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+
+public class ContaRequestDTO {
+    private String        referencia;   
+    private BigDecimal    valor;        
+    private SituacaoConta situacao;     
+}
