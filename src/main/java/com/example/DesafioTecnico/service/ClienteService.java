@@ -1,10 +1,7 @@
 package com.example.DesafioTecnico.service;
 
 import com.example.DesafioTecnico.model.Cliente;
-import com.example.DesafioTecnico.model.Conta;
-import com.example.DesafioTecnico.model.SituacaoConta;
 import com.example.DesafioTecnico.repository.ClienteRepository;
-import com.example.DesafioTecnico.repository.ContaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +11,12 @@ import java.util.List;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
-    private final ContaRepository contaRepository;
+    private final ContaService contaService;
     
 
-    public ClienteService(ClienteRepository clienteRepository, ContaRepository contaRepository) {
+    public ClienteService(ClienteRepository clienteRepository, ContaService contaService) {
         this.clienteRepository = clienteRepository;
-        this.contaRepository = contaRepository;    
+        this.contaService = contaService;    
     }
 
     @Transactional
@@ -53,23 +50,7 @@ public class ClienteService {
         Cliente cliente = clienteRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
 
-        List<Conta> contas = listarContasDoCliente(id);  // reutilizando o método
-
-        for (Conta conta : contas) {
-            if (conta.getSituacao() != SituacaoConta.CANCELADA) {
-                conta.setSituacao(SituacaoConta.CANCELADA);
-            }
-        }
-
-        contaRepository.saveAll(contas);
+        contaService.cancelarContasDoCliente(cliente);
         clienteRepository.delete(cliente);
-    }
-
-    
-    @Transactional(readOnly = true)
-    public List<Conta> listarContasDoCliente(Long clienteId) {
-        Cliente cliente = clienteRepository.findById(clienteId)
-            .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
-        return contaRepository.findByCliente(cliente);
     }
 }

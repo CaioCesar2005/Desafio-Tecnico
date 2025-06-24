@@ -33,11 +33,5 @@ public class ClienteController {
     public ResponseEntity<Void> excluirCliente(@PathVariable Long id) {
         clienteService.excluirCliente(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}/contas")
-    public ResponseEntity<List<Conta>> listarContasDoCliente(@PathVariable Long id) {
-        List<Conta> contas = clienteService.listarContasDoCliente(id);
-        return ResponseEntity.ok(contas);
-    }
+    }   
 }
