@@ -8,6 +8,7 @@ import com.example.DesafioTecnico.repository.ContaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.math.BigDecimal;
 
 @Service
@@ -40,7 +41,7 @@ public class ContaService {
     }
 
     @Transactional
-    public Conta CancelarContaLogicamente(Long idConta) {
+    public Conta cancelarContaLogicamente(Long idConta) {
         Conta conta = contaRepository.findById(idConta)
         .orElseThrow(() -> new IllegalArgumentException("Conta não existe no sistema")); 
    
@@ -51,4 +52,16 @@ public class ContaService {
         conta.setSituacao(SituacaoConta.CANCELADA);
         return contaRepository.save(conta);
     }
+
+    @Transactional
+    public void cancelarContasDoCliente(Cliente cliente) {
+        List<Conta> contas = contaRepository.findByCliente(cliente);
+
+        for (Conta conta : contas) {
+            cancelarContaLogicamente(conta.getId());
+        }
+    }
+
+    
+
 }
