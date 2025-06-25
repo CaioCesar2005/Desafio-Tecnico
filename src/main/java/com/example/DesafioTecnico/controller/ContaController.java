@@ -23,8 +23,7 @@ public class ContaController {
 
     @PostMapping("/clientes/{idCliente}/contas")
     public ResponseEntity<ContaResponseDTO> criarConta(@PathVariable Long idCliente, @Valid @RequestBody ContaRequestDTO contaRequestDTO) {
-        Conta contaEntity = ContaMapper.toEntity(contaRequestDTO, null);
-        Conta novaConta   = contaService.cadastrarConta(idCliente, contaEntity);
+        Conta novaConta = contaService.cadastrarConta(idCliente, contaRequestDTO);
         ContaResponseDTO responseDTO = ContaMapper.toDTO(novaConta);
         return ResponseEntity.ok(responseDTO);
     }
@@ -39,8 +38,8 @@ public class ContaController {
     public ResponseEntity<List<ContaResponseDTO>> listarContasPorCliente(@PathVariable Long idCliente) {
         List<Conta> contas = contaService.listarContasDoCliente(idCliente);
         List<ContaResponseDTO> contasDTO = contas.stream()
-                                                 .map(ContaMapper::toDTO)
-                                                 .collect(Collectors.toList());
+            .map(ContaMapper::toDTO)
+            .collect(Collectors.toList());
         return ResponseEntity.ok(contasDTO);
     }
 }
