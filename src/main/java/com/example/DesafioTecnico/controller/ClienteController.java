@@ -6,6 +6,10 @@ import com.example.DesafioTecnico.mapper.ClienteMapper;
 import com.example.DesafioTecnico.model.Cliente;
 import com.example.DesafioTecnico.service.ClienteService;
 import jakarta.validation.Valid;
+
+import java.util.stream.Collectors;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,4 +44,14 @@ public class ClienteController {
         clienteService.excluirCliente(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping
+    public ResponseEntity<List<ClienteResponseDTO>> listarClientes() {
+        List<Cliente> clientes = clienteService.listarClientes();
+        List<ClienteResponseDTO> responseDTOs = clientes.stream()
+            .map(ClienteMapper::toDTO)
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(responseDTOs);
+    }
+
 }
