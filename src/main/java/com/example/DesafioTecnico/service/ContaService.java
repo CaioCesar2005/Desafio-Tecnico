@@ -47,8 +47,7 @@ public class ContaService {
     @Transactional
     public Conta cancelarContaLogicamente(Long idConta) {
         Conta conta = contaRepository.findById(idConta)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Conta não existe no sistema"));
+                .orElseThrow(() -> new IllegalArgumentException("Conta não existe no sistema"));
 
         if (conta.getSituacao() == SituacaoConta.CANCELADA) {
             throw new IllegalStateException("Conta já está cancelada");
@@ -72,7 +71,6 @@ public class ContaService {
         }
 
         ContaMapper.copyToEntity(dto, conta);
-
         return contaRepository.save(conta);
     }
 
@@ -86,8 +84,7 @@ public class ContaService {
     @Transactional(readOnly = true)
     public List<Conta> listarContasDoCliente(Long clienteId) {
         Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Cliente não encontrado"));
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
         return contaRepository.findByCliente(cliente);
     }
 }
