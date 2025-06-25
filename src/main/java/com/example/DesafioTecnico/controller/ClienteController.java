@@ -6,12 +6,12 @@ import com.example.DesafioTecnico.mapper.ClienteMapper;
 import com.example.DesafioTecnico.model.Cliente;
 import com.example.DesafioTecnico.service.ClienteService;
 import jakarta.validation.Valid;
-
-import java.util.stream.Collectors;
-import java.util.List;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/clientes")
@@ -19,23 +19,27 @@ public class ClienteController {
 
     private final ClienteService clienteService;
 
-    public ClienteController(ClienteService clienteService){
+    public ClienteController(ClienteService clienteService) {
         this.clienteService = clienteService;
     }
 
+    /** POST /clientes */
     @PostMapping
-    public ResponseEntity<ClienteResponseDTO> criarCliente(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO) {
-        Cliente clienteEntity = ClienteMapper.toEntity(clienteRequestDTO);
-        Cliente clienteNovo = clienteService.cadastrarCliente(clienteEntity);
-        ClienteResponseDTO responseDTO = ClienteMapper.toDTO(clienteNovo);
-        return ResponseEntity.ok(responseDTO);
-    }
+    public ResponseEntity<ClienteResponseDTO> criarCliente(
+            @Valid @RequestBody ClienteRequestDTO dto) {
 
+        Cliente novoCliente = clienteService.cadastrarCliente(dto);
+        ClienteResponseDTO responseDTO = ClienteMapper.toDTO(novoCliente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
+    
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable Long id, @Valid @RequestBody ClienteRequestDTO clienteRequestDTO){
-        Cliente clienteAtualizado = ClienteMapper.toEntity(clienteRequestDTO);
-        Cliente cliente = clienteService.atualizarCliente(id, clienteAtualizado);
-        ClienteResponseDTO responseDTO = ClienteMapper.toDTO(cliente);
+    public ResponseEntity<ClienteResponseDTO> atualizarCliente(
+            @PathVariable Long id,
+            @Valid @RequestBody ClienteRequestDTO dto) {
+
+        Cliente clienteAtualizado = clienteService.atualizarCliente(id, dto);
+        ClienteResponseDTO responseDTO = ClienteMapper.toDTO(clienteAtualizado);
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -48,10 +52,9 @@ public class ClienteController {
     @GetMapping
     public ResponseEntity<List<ClienteResponseDTO>> listarClientes() {
         List<Cliente> clientes = clienteService.listarClientes();
-        List<ClienteResponseDTO> responseDTOs = clientes.stream()
-            .map(ClienteMapper::toDTO)
-            .collect(Collectors.toList());
-        return ResponseEntity.ok(responseDTOs);
+        List<ClienteResponseDTO> dtos = clientes.stream()
+                .map(ClienteMapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
-
 }
