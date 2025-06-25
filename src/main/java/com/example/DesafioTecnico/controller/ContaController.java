@@ -28,6 +28,13 @@ public class ContaController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @PutMapping("/contas/{id}")
+    public ResponseEntity<ContaResponseDTO> atualizarConta(@PathVariable Long id, @Valid @RequestBody ContaRequestDTO contaRequestDTO) {
+        Conta contaAtualizada = contaService.atualizarConta(id, contaRequestDTO);
+        ContaResponseDTO responseDTO = ContaMapper.toDTO(contaAtualizada);
+        return ResponseEntity.ok(responseDTO);
+    }
+
     @DeleteMapping("/contas/{id}")
     public ResponseEntity<Void> excluirConta(@PathVariable Long id) {
         contaService.cancelarContaLogicamente(id);
