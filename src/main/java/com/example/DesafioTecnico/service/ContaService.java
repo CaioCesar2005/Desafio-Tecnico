@@ -59,6 +59,25 @@ public class ContaService {
     }
 
     @Transactional
+    public Conta atualizarConta(Long idConta, ContaRequestDTO dto) {
+        Conta conta = contaRepository.findById(idConta)
+            .orElseThrow(() -> new IllegalArgumentException("Conta não encontrada."));
+
+        if (dto.getValor() != null && dto.getValor().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("O valor da conta não pode ser menor que zero.");
+        }
+
+        if (dto.getSituacao() == SituacaoConta.CANCELADA && conta.getSituacao() != SituacaoConta.CANCELADA) {
+            throw new IllegalArgumentException("A conta não pode ser atualizada para CANCELADA por este método.");
+        }
+
+        ContaMapper.copyToEntity(dto, conta);
+
+        return contaRepository.save(conta);
+    }
+
+
+    @Transactional
     public void cancelarContasDoClienteExcluido(Cliente cliente) {
         List<Conta> contas = contaRepository.findByCliente(cliente);
         contas.forEach(c -> cancelarContaLogicamente(c.getId()));
