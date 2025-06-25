@@ -9,6 +9,9 @@ import com.example.DesafioTecnico.repository.ClienteRepository;
 import com.example.DesafioTecnico.repository.ContaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.DesafioTecnico.exception.ClienteNotFoundException;
+import com.example.DesafioTecnico.exception.ContaNotFoundException;
+import com.example.DesafioTecnico.exception.RegraNegocioException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,15 +32,15 @@ public class ContaService {
 
         BigDecimal valor = dto.getValor();
         if (valor == null || valor.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("O valor da conta não pode ser menor que zero.");
+             throw new RegraNegocioException("O valor da conta não pode ser menor que zero.");
         }
 
         if (dto.getSituacao() == SituacaoConta.CANCELADA) {
-            throw new IllegalArgumentException("Não é permitido criar uma conta já com situação CANCELADA.");
+             throw new RegraNegocioException("Não é permitido criar uma conta já com situação CANCELADA.");
         }
 
         Cliente cliente = clienteRepository.findById(idCliente)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado."));
+            .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado."));
 
         Conta conta = ContaMapper.toEntity(dto, cliente);
 
@@ -47,10 +50,10 @@ public class ContaService {
     @Transactional
     public Conta cancelarContaLogicamente(Long idConta) {
         Conta conta = contaRepository.findById(idConta)
-                .orElseThrow(() -> new IllegalArgumentException("Conta não existe no sistema"));
+            .orElseThrow(() -> new ContaNotFoundException("Conta não encontrada."));
 
         if (conta.getSituacao() == SituacaoConta.CANCELADA) {
-            throw new IllegalStateException("Conta já está cancelada");
+            throw new RegraNegocioException("Conta já está cancelada.");
         }
 
         conta.setSituacao(SituacaoConta.CANCELADA);
@@ -60,14 +63,14 @@ public class ContaService {
     @Transactional
     public Conta atualizarConta(Long idConta, ContaRequestDTO dto) {
         Conta conta = contaRepository.findById(idConta)
-            .orElseThrow(() -> new IllegalArgumentException("Conta não encontrada."));
+            .orElseThrow(() -> new ContaNotFoundException("Conta não encontrada."));
 
         if (dto.getValor() != null && dto.getValor().compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("O valor da conta não pode ser menor que zero.");
+            throw new RegraNegocioException("O valor da conta não pode ser menor que zero.");
         }
 
         if (dto.getSituacao() == SituacaoConta.CANCELADA && conta.getSituacao() != SituacaoConta.CANCELADA) {
-            throw new IllegalArgumentException("A conta não pode ser atualizada para CANCELADA por este método.");
+            throw new RegraNegocioException("A conta não pode ser atualizada para CANCELADA por este método.");
         }
 
         ContaMapper.copyToEntity(dto, conta);
@@ -84,7 +87,7 @@ public class ContaService {
     @Transactional(readOnly = true)
     public List<Conta> listarContasDoCliente(Long clienteId) {
         Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+            .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
         return contaRepository.findByCliente(cliente);
     }
 }

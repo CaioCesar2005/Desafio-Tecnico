@@ -4,6 +4,8 @@ import com.example.DesafioTecnico.model.Cliente;
 import com.example.DesafioTecnico.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.DesafioTecnico.exception.ClienteNotFoundException;
+import com.example.DesafioTecnico.exception.RegraNegocioException;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class ClienteService {
     @Transactional
     public Cliente cadastrarCliente(Cliente cliente) {
         if (clienteRepository.existsByCpf(cliente.getCpf())) {
-            throw new IllegalArgumentException("Já existe um cliente com o CPF informado.");
+            throw new RegraNegocioException("Já existe um cliente com o CPF informado.");
         }
 
         return clienteRepository.save(cliente);
@@ -31,7 +33,7 @@ public class ClienteService {
     @Transactional
     public Cliente atualizarCliente(Long id, Cliente clienteAtualizado) {
         Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+               .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado."));
 
         cliente.setNome(clienteAtualizado.getNome());
         cliente.setTelefone(clienteAtualizado.getTelefone());
@@ -48,7 +50,7 @@ public class ClienteService {
     @Transactional
     public void excluirCliente(Long id) {
         Cliente cliente = clienteRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+            .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado."));
 
         contaService.cancelarContasDoClienteExcluido(cliente);
         clienteRepository.delete(cliente);
