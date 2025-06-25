@@ -1,13 +1,17 @@
 package com.example.DesafioTecnico.service;
 
+import com.example.DesafioTecnico.dto.ClienteRequestDTO;
+import com.example.DesafioTecnico.dto.ClienteResponseDTO;
+import com.example.DesafioTecnico.exception.ClienteNotFoundException;
+import com.example.DesafioTecnico.exception.RegraNegocioException;
+import com.example.DesafioTecnico.mapper.ClienteMapper;
 import com.example.DesafioTecnico.model.Cliente;
 import com.example.DesafioTecnico.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.DesafioTecnico.exception.ClienteNotFoundException;
-import com.example.DesafioTecnico.exception.RegraNegocioException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
@@ -22,29 +26,36 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente cadastrarCliente(Cliente cliente) {
-        if (clienteRepository.existsByCpf(cliente.getCpf())) {
+    public ClienteResponseDTO cadastrarCliente(ClienteRequestDTO dto) {
+
+        if (clienteRepository.existsByCpf(dto.getCpf())) {
             throw new RegraNegocioException("Já existe um cliente com o CPF informado.");
         }
 
-        return clienteRepository.save(cliente);
+        Cliente cliente = ClienteMapper.toEntity(dto);
+        Cliente salvo   = clienteRepository.save(cliente);
+
+        return ClienteMapper.toDTO(salvo);
     }
 
     @Transactional
-    public Cliente atualizarCliente(Long id, Cliente clienteAtualizado) {
+    public ClienteResponseDTO atualizarCliente(Long id,ClienteRequestDTO dto) {
+
         Cliente cliente = clienteRepository.findById(id)
                .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado."));
 
-        cliente.setNome(clienteAtualizado.getNome());
-        cliente.setTelefone(clienteAtualizado.getTelefone());
-        cliente.setEmail(clienteAtualizado.getEmail());
+        ClienteMapper.copyToEntity(dto, cliente);
+        Cliente atualizado = clienteRepository.save(cliente);
 
-        return clienteRepository.save(cliente);
+        return ClienteMapper.toDTO(atualizado);
     }
 
     @Transactional(readOnly = true)
-    public List<Cliente> listarClientes() {
-        return clienteRepository.findAll();
+    public List<ClienteResponseDTO> listarClientes() {
+        return clienteRepository.findAll()
+                .stream()
+                .map(ClienteMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional
