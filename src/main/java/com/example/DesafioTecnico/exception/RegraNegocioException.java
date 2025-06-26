@@ -1,9 +1,7 @@
 package com.example.DesafioTecnico.exception;
 
+// Exceção genérica para violação de regras de negócio
 public class RegraNegocioException extends RuntimeException {
-
-    private static final long serialVersionUID = 1L;
-
     public RegraNegocioException(String mensagem) {
         super(mensagem);
     }

@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.time.Instant;
 
+// Estrutura base para mensagens de erro padronizadas na API
 @Getter @Setter
 public class StandardError {
     private Instant instante;
