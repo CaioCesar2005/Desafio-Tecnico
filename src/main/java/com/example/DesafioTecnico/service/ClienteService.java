@@ -22,21 +22,20 @@ public class ClienteService {
         this.contaService      = contaService;
     }
 
+    // Cadastra um novo cliente, validando se o CPF já existe
     @Transactional
     public Cliente cadastrarCliente(ClienteRequestDTO dto) {
-
         if (clienteRepository.existsByCpf(dto.getCpf())) {
+            // Regra: não permitir CPF duplicado
             throw new RegraNegocioException("Já existe um cliente com o CPF informado.");
         }
-
         Cliente cliente = ClienteMapper.toEntity(dto);
         return clienteRepository.save(cliente);
     }
 
-   
+    // Atualiza dados do cliente pelo id, lança exceção se não encontrado
     @Transactional
     public Cliente atualizarCliente(Long id, ClienteRequestDTO dto) {
-
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado."));
 
@@ -44,16 +43,19 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
+    // Lista todos os clientes cadastrados (somente leitura)
     @Transactional(readOnly = true)
     public List<Cliente> listarClientes() {
         return clienteRepository.findAll();
     }
 
+    // Exclui cliente e cancela todas as contas associadas a ele
     @Transactional
     public void excluirCliente(Long id) {
         Cliente cliente = clienteRepository.findById(id)
             .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado."));
 
+        // Cancela contas antes de excluir o cliente
         contaService.cancelarContasDoClienteExcluido(cliente);
         clienteRepository.delete(cliente);
     }
