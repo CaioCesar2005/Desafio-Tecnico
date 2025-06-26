@@ -9,12 +9,17 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/clientes")
+@Tag(name = "Clientes", description = "Gerenciamento de clientes")
 public class ClienteController {
 
     private final ClienteService clienteService;
@@ -23,10 +28,10 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    /** POST /clientes */
     @PostMapping
-    public ResponseEntity<ClienteResponseDTO> criarCliente(
-            @Valid @RequestBody ClienteRequestDTO dto) {
+    @Operation(summary = "Cadastrar novo cliente")
+    @ApiResponse(responseCode = "201", description = "Cliente criado com sucesso")
+    public ResponseEntity<ClienteResponseDTO> criarCliente(@Valid @RequestBody ClienteRequestDTO dto) {
 
         Cliente novoCliente = clienteService.cadastrarCliente(dto);
         ClienteResponseDTO responseDTO = ClienteMapper.toDTO(novoCliente);
@@ -34,9 +39,9 @@ public class ClienteController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> atualizarCliente(
-            @PathVariable Long id,
-            @Valid @RequestBody ClienteRequestDTO dto) {
+    @Operation(summary = "Atualizar cliente existente")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),@ApiResponse(responseCode = "404", description = "Cliente não encontrado")})
+    public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable Long id,@Valid @RequestBody ClienteRequestDTO dto) {
 
         Cliente clienteAtualizado = clienteService.atualizarCliente(id, dto);
         ClienteResponseDTO responseDTO = ClienteMapper.toDTO(clienteAtualizado);
@@ -44,13 +49,19 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir cliente")
+    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Cliente excluído com sucesso"),@ApiResponse(responseCode = "404", description = "Cliente não encontrado")})
     public ResponseEntity<Void> excluirCliente(@PathVariable Long id) {
+        
         clienteService.excluirCliente(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
+    @Operation(summary = "Listar todos os clientes")
+    @ApiResponse(responseCode = "200", description = "Lista de clientes retornada com sucesso")
     public ResponseEntity<List<ClienteResponseDTO>> listarClientes() {
+        
         List<Cliente> clientes = clienteService.listarClientes();
         List<ClienteResponseDTO> dtos = clientes.stream()
                 .map(ClienteMapper::toDTO)
