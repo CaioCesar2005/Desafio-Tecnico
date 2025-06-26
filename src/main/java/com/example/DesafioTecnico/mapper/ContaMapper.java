@@ -7,6 +7,7 @@ import com.example.DesafioTecnico.model.Conta;
 
 public class ContaMapper {
 
+    // Converte entidade Conta para DTO de resposta (ContaResponseDTO)
     public static ContaResponseDTO toDTO(Conta conta) {
         return new ContaResponseDTO(
             conta.getId(),
@@ -17,6 +18,7 @@ public class ContaMapper {
         );
     }
 
+    // Converte DTO de requisição para entidade Conta, vinculando a um cliente
     public static Conta toEntity(ContaRequestDTO dto, Cliente cliente) {
         Conta conta = new Conta();
         conta.setReferencia(dto.getReferencia());
@@ -26,6 +28,7 @@ public class ContaMapper {
         return conta;
     }
 
+    // Copia dados do DTO para uma entidade Conta já existente (atualização)
     public static void copyToEntity(ContaRequestDTO dto, Conta conta) {
         conta.setReferencia(dto.getReferencia());
         conta.setValor(dto.getValor());
