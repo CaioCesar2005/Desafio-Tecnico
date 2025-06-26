@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 public class ClienteResponseDTO {
 
     @Schema(description = "ID do cliente", example = "1")
-    private Long   id;
+    private Long id;
 
     @Schema(description = "Nome do cliente", example = "Maria Silva")
     private String nome;
