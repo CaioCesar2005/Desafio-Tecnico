@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +32,10 @@ public class ClienteController {
     @PostMapping
     @Operation(summary = "Cadastrar novo cliente")
     @ApiResponse(responseCode = "201", description = "Cliente criado com sucesso")
-    public ResponseEntity<ClienteResponseDTO> criarCliente(@Valid @RequestBody ClienteRequestDTO dto) {
+    public ResponseEntity<ClienteResponseDTO> criarCliente(
+                    @Valid @RequestBody
+                    @Parameter(description = "Dados do cliente para cadastro")
+                    ClienteRequestDTO dto) {
 
         Cliente novoCliente = clienteService.cadastrarCliente(dto);
         ClienteResponseDTO responseDTO = ClienteMapper.toDTO(novoCliente);
@@ -41,7 +45,12 @@ public class ClienteController {
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar cliente existente")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),@ApiResponse(responseCode = "404", description = "Cliente não encontrado")})
-    public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable Long id,@Valid @RequestBody ClienteRequestDTO dto) {
+    public ResponseEntity<ClienteResponseDTO> atualizarCliente(
+                    @Parameter(description = "ID do cliente a ser atualizado", example = "1")
+                    @PathVariable Long id,
+                    @Valid @RequestBody
+                    @Parameter(description = "Novos dados para atualização do cliente")
+                    ClienteRequestDTO dto) {
 
         Cliente clienteAtualizado = clienteService.atualizarCliente(id, dto);
         ClienteResponseDTO responseDTO = ClienteMapper.toDTO(clienteAtualizado);
@@ -51,7 +60,9 @@ public class ClienteController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Excluir cliente")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Cliente excluído com sucesso"),@ApiResponse(responseCode = "404", description = "Cliente não encontrado")})
-    public ResponseEntity<Void> excluirCliente(@PathVariable Long id) {
+    public ResponseEntity<Void> excluirCliente(
+                    @Parameter(description = "ID do cliente a ser excluído", example = "1")
+                    @PathVariable Long id) {
         
         clienteService.excluirCliente(id);
         return ResponseEntity.noContent().build();
