@@ -6,6 +6,15 @@ O projeto foi feito para solucionar desafio proposto para testar meus conhecimen
 
 ---
 
+## 📖 Documentação Swagger
+
+Acesse a documentação interativa da API em:  
+📄 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)  
+ou  
+📄 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) (Springdoc)
+
+---
+
 ## 🧑‍💻 Tecnologias usadas e necessárias para rodar o projeto
 
 Para executar este projeto localmente, você precisará das seguintes tecnologias e ferramentas instaladas e configuradas:
@@ -52,17 +61,6 @@ Para executar este projeto localmente, você precisará das seguintes tecnologia
 
 ---
 
-## 📖 Documentação Swagger
-
-Acesse a documentação interativa da API em:  
-📄 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)  
-ou  
-📄 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) (Springdoc)
-
-
----
-
-
 ## ⚙️ Regras de negócio importantes
 
 - CPF deve ser único
@@ -83,16 +81,16 @@ No arquivo `src/main/resources/application.properties` (ou `.yml`), configure:
 1. Configure seu banco PostgreSQL e crie um banco para o projeto.
 2. Ajuste as configurações do banco em `src/main/resources/application.properties`:
    ```properties
-   spring.datasource.url=jdbc:postgresql://localhost:5432/seu_banco
-   spring.datasource.username=seu_usuario
-   spring.datasource.password=sua_senha
+   spring.datasource.url=jdbc:postgresql://localhost:5432/SEU_BANCO
+   spring.datasource.username=SEU_USUARIO
+   spring.datasource.password=SUA_SENHA
    spring.jpa.hibernate.ddl-auto=update
 
 ### Clone o projeto
-1. git clone https://github.com/seu-usuario/DesafioTecnico.git
+1. git clone https://github.com/CaioCesar2005/desafio-tecnico.git
    
 ### Acessar pasta no projeto
-2. cd DesafioTecnico
+2. cd desafio- tecnico
    
 ### Construir o projeto com Maven
 3. mvn clean install
@@ -140,18 +138,6 @@ No arquivo `src/main/resources/application.properties` (ou `.yml`), configure:
   ```
 ---
 
-## 🧪 Usando o Postman ou outra ferramenta REST (Recomendado para POST, PUT, DELETE):
-
-1. Abra o Postman.
-2. Escolha o método HTTP (POST, PUT, DELETE).
-3. Insira a URL (exemplo: `http://localhost:8080/clientes`).
-4. Na aba **Body**, selecione **JSON**.
-5. Insira o JSON conforme os exemplos abaixo.
-6. Clique em **Send**.
-7. Veja a resposta do servidor no painel abaixo.
-
-
----
 
 
 ## 🔍 Exemplo prático
