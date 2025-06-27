@@ -29,6 +29,7 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
+    // POST: CADASTRAR CLIENTE
     @PostMapping
     @Operation(summary = "Cadastrar novo cliente")
     @ApiResponse(responseCode = "201", description = "Cliente criado com sucesso")
@@ -42,6 +43,7 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
     
+    // PUT: ATUALIZAR CLIENTE
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar cliente existente")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),@ApiResponse(responseCode = "404", description = "Cliente não encontrado")})
@@ -57,6 +59,7 @@ public class ClienteController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    // DELETE: EXCLUIR CLIENTE
     @DeleteMapping("/{id}")
     @Operation(summary = "Excluir cliente")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Cliente excluído com sucesso"),@ApiResponse(responseCode = "404", description = "Cliente não encontrado")})
@@ -68,6 +71,7 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
+    //GET: LISTAR TODOS OS CLIENTES
     @GetMapping
     @Operation(summary = "Listar todos os clientes")
     @ApiResponse(responseCode = "200", description = "Lista de clientes retornada com sucesso")
