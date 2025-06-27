@@ -2,7 +2,7 @@
 
 API REST para gerenciamento de **Clientes** e suas **Contas**, feita em Java com Spring Boot, JPA/Hibernate e PostgreSQL.
 
-O projeto foi feito para solucionar desafio proposto para testar meus conhecimentos na area relativa ao mesmo
+O projeto foi feito para solucionar desafio proposto para testar meus conhecimentos em **java**, **Spring Boot** e **Banco de dados**
 
 ---
 
