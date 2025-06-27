@@ -84,12 +84,14 @@ public class ContaService {
         return contaRepository.save(conta);
     }
 
-    // Cancela todas as contas de um cliente que está sendo excluído
+    // Confere cada conta do cliente excluido, se nao estiver cancelada, chama o metodo de cancelsamento
     @Transactional
     public void cancelarContasDoClienteExcluido(Cliente cliente) {
         List<Conta> contas = contaRepository.findByCliente(cliente);
-        contas.forEach(c -> cancelarContaLogicamente(c.getId()));
-    }
+        contas.stream()
+          .filter(c -> c.getSituacao() != SituacaoConta.CANCELADA)
+          .forEach(c -> cancelarContaLogicamente(c.getId()));
+}
 
     // Lista todas as contas associadas a um cliente
     @Transactional(readOnly = true)
