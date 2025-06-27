@@ -12,12 +12,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Dados retornados para uma conta")
+// DTO para enviar dados de conta 
 public class ContaResponseDTO {
 
     @Schema(description = "ID da conta", example = "1")
     private Long id;
 
-    @Schema(description = "Referência da conta", example = "Conta Salário")
+    @Schema(description = "Referência da conta", example = "09-2005")
     private String referencia;
 
     @Schema(description = "Valor da conta", example = "1500.00")

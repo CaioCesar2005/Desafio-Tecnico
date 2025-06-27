@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Dados retornados para um cliente")
+// DTO para enviar dados de Cliente 
 public class ClienteResponseDTO {
 
     @Schema(description = "ID do cliente", example = "1")
