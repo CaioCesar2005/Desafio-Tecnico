@@ -6,15 +6,6 @@ O projeto foi feito para solucionar desafio proposto para testar meus conhecimen
 
 ---
 
-## 📖 Documentação Swagger
-
-Acesse a documentação interativa da API em:  
-📄 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)  
-ou  
-📄 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) (Springdoc)
-
----
-
 ## 🧑‍💻 Tecnologias usadas e necessárias para rodar o projeto
 
 Para executar este projeto localmente, você precisará das seguintes tecnologias e ferramentas instaladas e configuradas:
@@ -28,7 +19,10 @@ Para executar este projeto localmente, você precisará das seguintes tecnologia
 - **Spring Boot**  
   Framework Java para desenvolvimento da API REST.
 
-- **Banco de Dados PostgreSQL**  
+- **Banco de Dados PostgreSQL**
+
+
+  Armazena e gerencia os dados da aplicação.  
 
 - **IDE Java (opcional, mas recomendada)**  
   Exemplos: IntelliJ IDEA, Eclipse, VSCode com plugin Java.
@@ -36,10 +30,43 @@ Para executar este projeto localmente, você precisará das seguintes tecnologia
 - **Postman (ou qualquer cliente REST)**  
   Para testar e consumir os endpoints da API 
 
-- **Navegador Web**  
-  Para acessar endpoints GET diretamente via URL.
-
 ---
+
+## 📚 Bibliotecas
+
+- **spring-boot-starter-web**  
+  Framework pra criar API REST e apps web.
+
+- **spring-boot-starter-data-jpa**  
+  Pra usar JPA e mexer com banco.
+
+- **spring-boot-starter-validation**  
+  Validação de dados com anotações.
+
+- **spring-boot-starter-actuator**  
+  Monitoramento do app.
+
+- **h2 (escopo test)**  
+  Banco em memória só pros testes.
+
+- **postgresql (escopo runtime)**  
+  Driver pra conectar no PostgreSQL.
+
+- **lombok (escopo provided)**  
+  Gera getter/setter e outros no automático.
+
+- **springdoc-openapi-starter-webmvc-ui**  
+  Documentação automática da API (Swagger).
+
+- **spring-boot-devtools (runtime opcional)**  
+  Reinício automático no desenvolvimento.
+
+- **mockk (escopo test)**  
+  Biblioteca pra mocks nos testes.
+
+- **spring-boot-starter-test (escopo test)**  
+  Ferramentas de teste, sem Mockito pra não bater com mockk.
+
 
 ## 📄 Entidades principais
 
@@ -85,22 +112,43 @@ No arquivo `src/main/resources/application.properties` (ou `.yml`), configure:
    spring.datasource.username=SEU_USUARIO
    spring.datasource.password=SUA_SENHA
    spring.jpa.hibernate.ddl-auto=update
+   
+ **Clone o projeto**
 
-### Clone o projeto
 1. git clone https://github.com/CaioCesar2005/desafio-tecnico.git
    
-### Acessar pasta no projeto
-2. cd desafio- tecnico
+ **Acessar pasta no projeto**
+
+2. cd desafio-tecnico
    
-### Construir o projeto com Maven
+ **Construir o projeto com Maven**
+
 3. mvn clean install
 
-### Executar a aplicação
+ **Executar a aplicação**
+
 4. mvn spring-boot:run
 
 ---
 
-## 🧪 Usando o Postman ou outra ferramenta REST (Recomendado para POST, PUT, DELETE):
+# 📖 Documentação Swagger
+
+### Com essa ferramenta voce tem acesso a mapemanto de end points e parametros do controller de forma interativa e agradavel visualmente
+
+
+Apos executar o projeto com
+  ```
+  mvn spring-boot:run
+  ``` 
+Acesse a documentação interativa da API em:  
+ 
+    📄 http://localhost:8080/swagger-ui.html
+     ou  
+    📄 http://localhost:8080/swagger-ui/index.html (Springdoc)
+
+---
+
+## 🧪 Usando o Postman
 
 1. Abra o Postman.
 2. Escolha o método HTTP (POST, PUT, DELETE).
@@ -110,47 +158,98 @@ No arquivo `src/main/resources/application.properties` (ou `.yml`), configure:
 6. Clique em **Send**.
 7. Veja a resposta do servidor no painel abaixo.
 
+
+
+
 ---
 
-## 🌐 Endpoints da API
+## ✅ Diferenciais e Melhorias Extras
 
-### Cliente
+Ao longo do desenvolvimento deste projeto, foram implementadas diversas práticas e melhorias que vão além do escopo básico esperado. Abaixo estão listados os principais diferenciais:
 
-   ```cliente
-  GET /clientes - Lista todos os clientes cadastrados
+**Validações Extras**
+- Utilização de anotações de validação do Bean Validation (`@NotBlank`, `@Email`, `@Size`, etc.) em DTOs.
+- Regras de negócio aplicadas na camada de serviço, garantindo integridade dos dados.
 
-  POST /clientes - Cadastra um novo cliente
+**Testes**
+- Testes unitários para os serviços, validando regras de negócio.
+- Testes de integração com o banco de dados utilizando o perfil de teste e H2 em memória.
 
-  PUT /clientes/{id} - Atualiza os dados de um cliente pelo ID
+**Documentação com Swagger**
+- Integração do **Springdoc OpenAPI** para geração automática da documentação da API.
+- DTOs anotados com `@Schema` e controllers organizados com `@Tag`, `@Operation` e `@ApiResponse`.
 
-  DELETE /clientes/{id} - Exclui o cliente e cancela todas as suas contas  
-  ```
-### Conta
+**Uso de DTOs e Mapeamento**
+- Criação de DTOs para entrada e saída de dados (Request/Response).
+- Mapeamento e conversão dos DTOs em entidades de forma segura e limpa
 
-  ```conta
-  GET /clientes/{clienteId}/contas - Lista todas as contas do cliente informado
+**Tratamento Global de Erros**
+- Implementação de `@ControllerAdvice` para captura e personalização de exceções.
+- Respostas padronizadas com status HTTP apropriados e mensagens claras para o cliente.
 
-  POST /clientes/{clienteId}/contas - Cria uma nova conta para o cliente
+**Arquitetura Limpa e Camadas Separadas**
+- Estrutura baseada em camadas (Controller, Service, Repository, Model, DTO, Exception).
+- Padrão de projeto adotado facilita manutenção, testes e escalabilidade.
+- Nomeclatura correta de classes, metodos, arquivos, packages e atributos
 
-  PUT /contas/{id} - Atualiza os dados de uma conta (exceto para CANCELADA)
+**Commits atômicos**
+- Padrão usado para melhorar desenvolvimento e planejamento do projeto
+- Minimizando imprevistos e mantendo organização do repositório remoto e seu histórico, facilitando identificação de erros, sendo possivel um "backup" limpo quando necessário
 
-  PATCH /contas/{id}/cancelar - Cancela logicamente a conta (define situação como CANCELADA)
-  ```
 ---
 
+## 🔍 Testes Unitários
 
+### ClienteService
 
-## 🔍 Exemplo prático
+ **Cadastrar cliente**
+- Cadastra cliente com sucesso
+- Lança exceção se CPF já existe
 
-### Criar cliente via Postman
+ **Atualizar cliente**
+- Atualiza cliente existente
+- Lança exceção se cliente não encontrado
 
-- **Método:** POST  
-- **URL:** `http://localhost:8080/clientes`  
-- **Body JSON:**
-```json
-{
-"nome": "Ana Paula",
-"cpf": "12345678900",
-"telefone": "999999999",
-"email": "ana@example.com"
-}
+ **Listar clientes**
+- Retorna lista de clientes
+
+ **Excluir cliente**
+- Exclui cliente e cancela contas associadas
+- Lança exceção se cliente não encontrado
+
+---
+
+### ContaService
+
+ **Cadastrar conta**
+- Cadastra conta com sucesso
+- Lança exceção se valor negativo
+- Lança exceção se situação for CANCELADA ao cadastrar
+- Lança exceção se cliente não encontrado
+
+ **Cancelar conta logicamente**
+- Cancela conta PENDENTE com sucesso
+- Lança exceção se conta já estiver CANCELADA
+- Lança exceção se conta não encontrada
+
+ **Atualizar conta**
+- Atualiza valor da conta com sucesso
+- Lança exceção se valor negativo ao atualizar
+- Lança exceção se tentar atualizar situação para CANCELADA por esse método
+- Lança exceção se conta não encontrada
+
+--- 
+## 🔍 Testes de integração 
+
+### ClienteController
+- **POST /clientes**: cria um cliente.
+- **PUT /clientes/{id}**: atualiza um cliente existente.
+- **DELETE /clientes/{id}**: exclui um cliente.
+- **GET /clientes**: lista todos os clientes.
+- **GET /clientes/{id}**: busca um cliente pelo ID.
+
+### ContaController
+- **POST /clientes/{id}/contas**: cria uma conta para o cliente.
+- **PUT /contas/{id}**: atualiza uma conta existente.
+- **DELETE /contas/{id}**: cancela (logicamente) uma conta.
+- **GET /clientes/{id}/contas**: lista todas as contas de um cliente.

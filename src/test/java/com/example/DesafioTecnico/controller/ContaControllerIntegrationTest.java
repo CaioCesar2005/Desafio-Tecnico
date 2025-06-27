@@ -21,18 +21,14 @@ import java.util.List;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Integração “slice” para ContaController – garante mapeamentos
- * e contratos HTTP; lógica de negócio permanece coberta pelos testes de service.
- */
+
 
 @WebMvcTest(ContaController.class)
-@DisplayName("ContaController – Testes de Integração")
+@DisplayName("ContaController - Testes de Integração")
 class ContaControllerIntegrationTest {
 
     @Autowired
