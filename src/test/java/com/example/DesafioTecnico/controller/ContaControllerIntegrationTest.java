@@ -41,7 +41,7 @@ class ContaControllerIntegrationTest {
     private ContaService contaService;
 
     private Cliente cliente() {
-        return new Cliente(1L, "Ana", "111", "", "");
+        return new Cliente(1L, "Ana", "11111111111", "", "");
     }
 
     private Conta contaStub() {
@@ -57,7 +57,8 @@ class ContaControllerIntegrationTest {
     @Nested
     @DisplayName("POST /clientes/{id}/contas")
     class CriarConta {
-
+    // Testa criação de conta (POST /contas)
+        
         @Test
         @DisplayName("200 - deve criar conta para cliente")
         void criar() throws Exception {
@@ -75,7 +76,8 @@ class ContaControllerIntegrationTest {
     @Nested
     @DisplayName("PUT /contas/{id}")
     class AtualizarConta {
-
+    // Testa atualização de conta (PUT /contas/{id})
+        
         @Test
         @DisplayName("200 - deve atualizar conta existente")
         void atualizar() throws Exception {
@@ -92,7 +94,8 @@ class ContaControllerIntegrationTest {
     @Nested
     @DisplayName("DELETE /contas/{id}")
     class ExcluirConta {
-
+    // Testa exclusão de conta (DELETE /contas/{id})
+        
         @Test
         @DisplayName("204 - deve cancelar conta")
         void excluir() throws Exception {
@@ -107,8 +110,9 @@ class ContaControllerIntegrationTest {
     @Nested
     @DisplayName("GET /clientes/{id}/contas")
     class ListarContasCliente {
-
-        @Test
+     // Testa listagem de contas (GET /contas)
+        
+     @Test
         @DisplayName("200 - deve listar contas do cliente")
         void listarContas() throws Exception {
             when(contaService.listarContasDoCliente(1L)).thenReturn(List.of(contaStub()));

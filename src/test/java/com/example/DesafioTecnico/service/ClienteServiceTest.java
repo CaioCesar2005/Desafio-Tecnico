@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,7 +42,8 @@ class ClienteServiceTest {
     @Nested
     @DisplayName("Cadastrar cliente")
     class Cadastrar {
-
+     // Testa cadastro de cliente
+        
         @Test
         @DisplayName("Deve cadastrar cliente com sucesso")
         void cadastraCliente() {
@@ -57,6 +60,7 @@ class ClienteServiceTest {
             }
         }
 
+        // Testa não deve cadastrar
         @Test
         @DisplayName("Não deve cadastrar CPF duplicado")
         void cpfDuplicado() {
@@ -67,10 +71,11 @@ class ClienteServiceTest {
                     .hasMessageContaining("CPF");
         }
     }
-
+    
     @Nested
     @DisplayName("Atualizar cliente")
     class Atualizar {
+    // Testa atualização de cliente existente
 
         @Test
         @DisplayName("Deve atualizar cliente existente")
@@ -87,7 +92,7 @@ class ClienteServiceTest {
                 assertThat(atualizado).isSameAs(existente);
             }
         }
-
+        // Testa exceção clietne nao encontrado
         @Test
         @DisplayName("Deve lançar exceção se cliente não existir")
         void clienteNaoEncontrado() {
@@ -98,11 +103,11 @@ class ClienteServiceTest {
         }
     }
 
-    
     @Nested
     @DisplayName("Listar clientes")
     class Listar {
-
+    // Testa listagem de clientes
+    
         @Test
         @DisplayName("Deve retornar lista de clientes")
         void listaClientes() {
@@ -111,11 +116,12 @@ class ClienteServiceTest {
             assertThat(service.listarClientes()).hasSize(2);
         }
     }
-
+    
     @Nested
     @DisplayName("Excluir cliente")
     class Excluir {
-
+    // Testa exclusão de cliente
+        
         @Test
         @DisplayName("Deve excluir cliente e cancelar contas")
         void excluiCliente() {
@@ -128,6 +134,7 @@ class ClienteServiceTest {
             verify(clienteRepository).delete(cli);
         }
 
+        // Testa exceção cliente nao existe
         @Test
         @DisplayName("Deve lançar exceção se cliente não existir")
         void clienteNaoExisteAoExcluir() {

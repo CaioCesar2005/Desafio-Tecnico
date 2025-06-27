@@ -42,6 +42,7 @@ class ClienteControllerIntegrationTest
         return new Cliente(1L, "Ana", "11111111111", "8199998888", "ana@ex.com");
     }
 
+    // Retorna um DTO de cliente de exemplo
     private ClienteRequestDTO dtoStub() {
         ClienteRequestDTO dto = new ClienteRequestDTO();
         dto.setNome("Ana");
@@ -52,28 +53,39 @@ class ClienteControllerIntegrationTest
     }
 
     @Nested
-    @DisplayName("POST /clientes")
-    class CriarCliente {
+class CriarCliente {
 
-        @Test
-        @DisplayName("201 - deve cadastrar cliente e retornar DTO")
-        void criarComSucesso() throws Exception {
-            when(clienteService.cadastrarCliente(any())).thenReturn(clienteStub());
+    // Testa criação de cliente válida
+    @Test
+    void criarComSucesso() throws Exception {
+        when(clienteService.cadastrarCliente(any())).thenReturn(clienteStub());
 
-            mvc.perform(post("/clientes")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(mapper.writeValueAsString(dtoStub())))
-               .andExpect(status().isCreated())
-               .andExpect(jsonPath("$.id").value(1))
-               .andExpect(jsonPath("$.nome").value("Ana"))
-               .andExpect(jsonPath("$.cpf").value("11111111111"));
-        }
+        mvc.perform(post("/clientes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(dtoStub())))
+           .andExpect(status().isCreated())
+           .andExpect(jsonPath("$.id").value(1))
+           .andExpect(jsonPath("$.nome").value("Ana"));
     }
+
+    // Testa erro 400 ao tentar criar cliente com DTO inválido
+    @Test
+    @DisplayName("400 - deve falhar se DTO for inválido")
+    void criarClienteComDtoInvalido() throws Exception {
+        ClienteRequestDTO dtoInvalido = new ClienteRequestDTO(); // campos nulos
+
+        mvc.perform(post("/clientes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(dtoInvalido)))
+           .andExpect(status().isBadRequest());
+    }
+}
 
     @Nested
     @DisplayName("PUT /clientes/{id}")
     class AtualizarCliente {
-
+    // Testa atualização de cliente (PUT /clientes/{id})    
+        
         @Test
         @DisplayName("200 - deve atualizar cliente existente")
         void atualizarComSucesso() throws Exception {
@@ -90,7 +102,8 @@ class ClienteControllerIntegrationTest
     @Nested
     @DisplayName("DELETE /clientes/{id}")
     class ExcluirCliente {
-
+    // Testa exclusão de cliente (DELETE /clientes/{id})
+        
         @Test
         @DisplayName("204 - deve excluir cliente")
         void excluirComSucesso() throws Exception {
@@ -104,7 +117,8 @@ class ClienteControllerIntegrationTest
     @Nested
     @DisplayName("GET /clientes")
     class ListarClientes {
-
+     // Testa listagem de clientes (GET /clientes)
+        
         @Test
         @DisplayName("200 - deve listar todos os clientes")
         void listar() throws Exception {

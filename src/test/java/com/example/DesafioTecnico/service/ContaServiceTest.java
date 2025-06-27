@@ -32,7 +32,6 @@ class ContaServiceTest {
     private final ClienteRepository clienteRepository = mock(ClienteRepository.class);
     private final ContaService service = new ContaService(contaRepository, clienteRepository);
 
-    // Helper para criar DTOs com valores padrão
     private ContaRequestDTO dto(BigDecimal valor, SituacaoConta situacao) {
         ContaRequestDTO dto = new ContaRequestDTO();
         dto.setReferencia("REF-01");
@@ -44,6 +43,7 @@ class ContaServiceTest {
     @Nested
     @DisplayName("Cadastrar conta")
     class Cadastrar {
+     // Testa criação de conta
 
         @Test
         @DisplayName("Deve cadastrar conta com sucesso")
@@ -65,6 +65,7 @@ class ContaServiceTest {
             }
         }
 
+        // Testa regra de nao criar conta com valor negativo
         @Test
         @DisplayName("Não deve cadastrar com valor negativo")
         void naoDeveCadastrarValorNegativo() {
@@ -75,6 +76,7 @@ class ContaServiceTest {
                     .hasMessageContaining("menor que zero");
         }
 
+         // Testa regra de nao criar conta CANCELADA
         @Test
         @DisplayName("Não deve cadastrar conta já CANCELADA")
         void naoDeveCadastrarContaCancelada() {
@@ -85,6 +87,7 @@ class ContaServiceTest {
                     .hasMessageContaining("CANCELADA");
         }
 
+        // Testa exceção de cliente nao existe
         @Test
         @DisplayName("Deve lançar exceção se cliente não existir")
         void deveLancarSeClienteNaoExistir() {
@@ -99,6 +102,7 @@ class ContaServiceTest {
     @DisplayName("Cancelar conta logicamente")
     class Cancelar {
 
+        // Testa cancelar conta
         @Test
         @DisplayName("Deve cancelar conta pendente com sucesso")
         void deveCancelarContaPendente() {
@@ -112,6 +116,7 @@ class ContaServiceTest {
             assertThat(cancelada.getSituacao()).isEqualTo(SituacaoConta.CANCELADA);
         }
 
+        // Testa regra de nao cancelar conta ja cancelada
         @Test
         @DisplayName("Não deve cancelar se conta já estiver CANCELADA")
         void naoDeveCancelarContaJaCancelada() {
@@ -122,6 +127,7 @@ class ContaServiceTest {
                     .isInstanceOf(RegraNegocioException.class);
         }
 
+        // Testa exceção de conta não existe
         @Test
         @DisplayName("Deve lançar exceção se conta não existir")
         void deveLancarSeContaNaoExistir() {
@@ -131,10 +137,11 @@ class ContaServiceTest {
                     .isInstanceOf(ContaNotFoundException.class);
         }
     }
-
+ 
     @Nested
     @DisplayName("Atualizar conta")
     class Atualizar {
+    // Testa atualização de conta
 
         @Test
         @DisplayName("Deve atualizar valor com sucesso")
@@ -151,6 +158,7 @@ class ContaServiceTest {
             assertThat(atualizado.getValor()).isEqualByComparingTo("50");
         }
 
+        // Testa não atualizar conta co valor negativo
         @Test
         @DisplayName("Não deve aceitar valor negativo")
         void naoDeveAtualizarValorNegativo() {
@@ -160,7 +168,8 @@ class ContaServiceTest {
             assertThatThrownBy(() -> service.atualizarConta(1L, dto(BigDecimal.valueOf(-5), SituacaoConta.PENDENTE)))
                     .isInstanceOf(RegraNegocioException.class);
         }
-
+        
+        // Testa não atualizar conta para cancelada
         @Test
         @DisplayName("Não deve atualizar situação para CANCELADA por este método")
         void naoDeveAtualizarSituacaoParaCancelada() {
@@ -173,6 +182,7 @@ class ContaServiceTest {
                     .isInstanceOf(RegraNegocioException.class);
         }
 
+        // Testa exceção de conta não existe
         @Test
         @DisplayName("Deve lançar exceção se conta não existir")
         void deveLancarSeContaNaoExistirAoAtualizar() {
